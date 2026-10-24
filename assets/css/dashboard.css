@@ -1,0 +1,440 @@
+/* Modern Dashboard CSS */
+body {
+    background-color: #f8f9fe;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.content-wrapper {
+    background-color: #f8f9fe;
+}
+
+/* Custom Alert */
+.custom-alert {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    border-left: 6px solid #20c997;
+    padding: 1rem 1.5rem;
+    font-size: 0.95rem;
+    color: #4a5568;
+    display: flex;
+    align-items: center;
+}
+
+.custom-alert i {
+    font-size: 1.2rem;
+    color: #f6c23e;
+}
+
+/* Summary Card */
+.total-card {
+    background: linear-gradient(135deg, #86eaf0 0%, #c4f0f4 100%);
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+    position: relative;
+    overflow: hidden;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dashboard-card-1 {
+    background: linear-gradient(100deg, #f19ba5 0%, #ffffff 100%);
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.total-card-1 {
+    background: linear-gradient(135deg, #e6f7f8 0%, #dbf4c4 100%);
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.icon-uang-vital {
+    color: #198754;
+    font-size: 1.5rem;
+}
+
+.total-card-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    z-index: 2;
+}
+
+.icon-circel-putih {
+    width: 60px;
+    height: 60px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+}
+
+.total-card-icon {
+    width: 60px;
+    height: 60px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: #0dcaf0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.total-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.total-card-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 5px;
+}
+
+.total-card-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #1a202c;
+    line-height: 1.1;
+    margin-bottom: 5px;
+}
+
+.tulisan-hasil {
+    color: #000000;
+    -webkit-text-stroke: 2px #ffffff;
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 5px;
+    paint-order: stroke fill;
+}
+
+.total-card-trend {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #20c997;
+    -webkit-text-stroke: 1px #ffffff;
+    paint-order: stroke fill;
+}
+
+.total-card-image {
+    position: absolute;
+    right: 20px;
+    bottom: -10px;
+    height: 120%;
+    z-index: 1;
+    opacity: 0.9;
+}
+
+/* Chart Cards */
+.dashboard-card {
+    background: #ffffff;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    box-shadow: 100px 25px rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+    height: 100%;
+    position: relative;
+}
+
+.warna-biru-muda {
+    background: linear-gradient(100deg, #9bc2f1 0%, #5e80ee 100%);
+    border-radius: 20px;
+    padding: 24px;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+    max-width: 900px;
+    margin: 20px auto;
+    transition: all 0.3s ease;    
+}
+    
+.warna-putih-gradasi {
+    background: linear-gradient(180deg, #f0f5ff 0%, #ffffff 100%);
+    border-radius: 20px;
+    padding: 24px;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 10px 30px -5px rgba(0, 102, 255, 0.05);
+    max-width: 900px;
+    margin: 20px auto;
+    transition: all 0.3s ease;    
+}
+
+.dashboard-card-header {
+    padding: 20px 24px 10px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+    border-bottom: none;
+    margin-bottom: 20px;
+}
+
+.dashboard-card-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #2d3748;
+    -webkit-text-stroke: 2px #ffffff;
+    margin: 0;
+    paint-order: stroke fill;
+}
+
+.dashboard-card-tools {
+    display: flex;
+    gap: 10px;
+}
+
+.tool-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid #edf2f7;
+    background: #f8f9fe;
+    color: #718096;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tool-btn:hover {
+    background: #edf2f7;
+    color: #2d3748;
+}
+
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+    padding: 0 20px 20px 20px;
+    paint-order: stroke fill;
+}
+
+/* Custom Styles for Dashboard Pendaftaran */
+.progress-bar-custom {
+    background-color: #20c997;
+    height: 24px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    color: white;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+.progress-wrapper {
+    background-color: #f1f3f5;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.table-custom th {
+    background-color: #f8f9fe;
+    font-weight: 600;
+    color: #4a5568;
+    border-bottom: 2px solid #e2e8f0;
+    font-size: 0.85rem;
+}
+
+.table-custom td {
+    vertical-align: middle;
+    color: #2d3748;
+    font-size: 0.85rem;
+}
+
+.tulisan {
+    color: #000000;
+    -webkit-text-stroke: 2px #ffffff;
+    border: none;
+    font-size: 0.9rem;
+    font-weight: bold;
+    paint-order: stroke fill;
+}
+
+.tulisan-judul {
+    color: #000000;
+    -webkit-text-stroke: 2px #ffffff;
+    font-size: 1.1rem;
+    border: none;
+    font-weight: bold;
+    paint-order: stroke fill;
+}
+
+.btn-cyan:hover {
+    background-color: #38807d;
+    color: #fff;
+    font-size: 0.85rem;
+}
+
+.search-input {
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    padding: 5px 10px;
+    outline: none;
+}
+
+.search-input:focus {
+    border-color: #459a96;
+    box-shadow: 0 0 0 2px rgba(69, 154, 150, 0.2);
+}
+
+/* Dashboard Klinik Styles */
+.klinik-stat-card {
+    border-radius: 1rem;
+    background-color: #fff;
+    border: 1px solid #edf2f7;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+.klinik-icon-box {
+    width: 64px;
+    height: 64px;
+    background-color: #e0f2fe;
+    color: #0284c7;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.klinik-badge-urgent {
+    background-color: #fee2e2;
+    color: #ef4444;
+    border-radius: 9999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.klinik-table-card {
+    border-radius: 1rem;
+    background-color: #fff;
+    border: 1px solid #edf2f7;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+}
+
+.klinik-table th {
+    background-color: #f1f5f9;
+    color: #475569;
+    font-weight: 600;
+    border: none;
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+}
+
+.klinik-table th:first-child {
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+}
+
+.klinik-table th:last-child {
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+.klinik-table td {
+    border-bottom: 1px solid #f8fafc;
+    padding: 1rem;
+    vertical-align: middle;
+    color: #1e293b;
+    font-size: 0.85rem;
+}
+
+.klinik-badge-belum {
+    background-color: #fef3c7;
+    color: #d97706;
+    border-radius: 9999px;
+    padding: 0.35rem 1rem;
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.klinik-badge-selesai {
+    background-color: #dcfce7;
+    color: #16a34a;
+    border-radius: 9999px;
+    padding: 0.35rem 1rem;
+    font-weight: 600;
+    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.klinik-chart-controls .btn {
+    border: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+    color: #64748b;
+    font-size: 0.875rem;
+}
+
+.klinik-chart-controls .btn:hover {
+    background-color: #f1f5f9;
+}
+
+/* Responsivitas Layar Kecil (Mobile) - Bootstrap 5 */
+@media (max-width: 768px) {
+    .content-wrapper {
+        padding: 1rem !important;
+    }
+
+    .total-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+    }
+
+    .total-card-image {
+        display: none;
+        /* Sembunyikan gambar dekorasi di mobile agar tidak menutupi teks */
+    }
+
+    .dashboard-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .chart-container {
+        height: 250px !important;
+    }
+
+    .custom-alert {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}

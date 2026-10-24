@@ -1,0 +1,28 @@
+
+# ==========================================
+# CodeIgniter 3 - Runtime
+# ==========================================
+/application/cache/*
+!/application/cache/index.html
+
+/application/logs/*
+!/application/logs/index.html
+
+# ==========================================
+# Database - data sensitif
+# ==========================================
+/database/*.sql
+!/database/lebkes_schema.sql
+!/database/security_features.sql
+!/database/security_sessions.sql
+
+/database/backup/
+
+# ==========================================
+# OS / editor
+# ==========================================
+Thumbs.db
+desktop.ini
+.DS_Store
+.idea/
+.vscode/

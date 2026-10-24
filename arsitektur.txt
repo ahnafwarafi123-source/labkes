@@ -1,0 +1,324 @@
+ARSITEKTUR PROJECT: lebkes-main
+======================================================
+Framework   : CodeIgniter 3
+Frontend    : Bootstrap 5
+Architecture: MVC dengan Sub-Directory
+======================================================
+
+1. STRUKTUR URL DAN AKSES (ROUTING)
+------------------------------------------------------
+A. Publik (Pengguna Umum)
+- URL       : lebkes-main/
+- Controller: C:\laragon\www\lebkes-main\application\controllers\Public_pendaftaran.php
+- View      : C:\laragon\www\lebkes-main\application\views\public\ (Gunakan sub-folder 'public')
+
+B. Modul login Klinik (Petugas Klinik)
+- URL       : lebkes-main/klinik/petugas_klinik
+- Controller: C:\laragon\www\lebkes-main\application\controllers\klinik\Petugas_klinik.php
+- View      : C:\laragon\www\lebkes-main\application\views\klinik\ (Gunakan sub-folder 'klinik')
+
+C. Modul login Kesmas (Petugas Kesmas)
+- URL       : lebkes-main/kesmas/petugaslogin
+- Controller: C:\laragon\www\lebkes-main\application\controllers\Auth.php
+- View      : C:\laragon\www\lebkes-main\application\views\auth\ (Gunakan sub-folder 'kesmas')
+
+
+2. STRUKTUR DIREKTORI PROYEK (lebkes-main)
+======================================
+├── application/
+│   ├── cache/ (Penyimpanan session php cache)
+│   ├── config/ (Konfigurasi CI3)
+│   │   ├── autoload.php  
+│   │   ├── config.php
+│   │   ├── database.php
+│   │   ├── routes.php
+│   ├── controllers/ (Logika Pengendali / Router)
+│   │   ├── kesmas/
+│   │   │   ├── Form_permintaan_kesmas.php
+│   │   │   ├── Laporan_uji_kesmas.php
+│   │   │   ├── Permintaan_sample.php
+│   │   │   ├── Public_survey.php
+│   │   │   ├── Survei.php
+│   │   ├── klinik/
+│   │   │   ├── Auth.php                           (Controller Login Utama klinik)
+│   │   │   ├── Dashboard.php                      (Controller untuk halaman sesudah login klinik)
+│   │   │   ├── form_laporan_akhir.php             (Controller untuk melihat laporan pertahun)  
+│   │   │   ├── Form_permintaan_klinik.php         (Controller untuk data permintaan pemeriksaan klinik)
+│   │   │   ├── Form_permintaan_rm.php             (Controller untuk halaman Data Identitas Pasien Klinik (rekam_medis))
+│   │   │   ├── Hasil_laporan.php                  (Controller untuk melihat data hasil pasien soap )
+│   │   │   ├── Laporan_hasil_pemeriksaan.php      (Controller untuk laporan perbulan )
+│   │   │   ├── Laporan_uji_klinik.php             (Controller untuk halaman laporan klinik)
+│   │   │   ├── Penanggung_teknis.php              (Controller untuk data halaman penanggung jawab teknis klinik)
+│   │   │   ├── petugas_dokter.php                 (Controller untuk data halaman petugas_dokter klinik)
+│   │   │   ├── Petugas_sampel.php                 (Controller untuk data halaman petugas sampel klinik)
+│   │   │   ├── Petugas_validasi.php               (Controller untuk data halaman petugas_validasi klinik)
+│   │   │   ├── Petugas_verifikasi.php             (Controller untuk data halaman petugas_validasi klinik)
+│   │   │   ├── Uji_klinik.php                     (Controller untuk halaman input hasil uji laboratorium klinik)
+│   │   │   ├── Uji_rekam_klinik.php               (Controller untuk melihat riwayat kunjungan pasien untuk klinik)
+│   │   │   ├── Uji_rekam_medis.php                (Controller untuk data halaman kunjungan pasien(rekam_medis))
+│   │   │   ├── User.php                           (controller user untuk login klinik)
+│   │   │   ├── Verifikator.php                    (Controller untuk data halaman verifikator klinik)
+│   │   ├── Auth.php
+│   │   ├── Dashboard.php
+│   │   ├── Penanggung_jawab_teknis.php
+│   │   ├── Petugas.php
+│   │   ├── Public_pendaftaran.php
+│   │   ├── Security.php
+│   │   ├── Tindakan_sampel.php
+│   │   ├── Verifikator.php
+│   ├── core/ (Class Utama Turunan Kustom)
+│   │   ├── MY_Controller.php
+│   ├── helpers/ (Fungsi Bantuan Kustom)
+│   │   ├── auth_helper.php
+│   │   ├── kesmas_audit_helper.php
+│   │   ├── kesmas_helper.php
+│   │   ├── report_helper.php
+│   │   ├── security_helper.php
+│   ├── libraries/ (Library Tambahan Kustom)
+│   │   ├── pdf.php
+│   ├── logs/ (File Log Harian Aplikasi)
+│   ├── models/ (Logika Data & Akses Database)
+│   │   ├── Klinik/
+│   │   │   ├── Dashboard_model.php                       (Model untuk dashboard klinik)                        
+│   │   │   ├── Form_permintaan_klinik_model.php          (Model untuk Form_permintaan_klinik )                        
+│   │   │   ├── Form_permintaan_rm_model.php              (Model untuk Form_permintaan_rm Klinik )                        
+│   │   │   ├── Hasil_laporan_model.php                   (Model untuk Hasil_laporan klinik )                        
+│   │   │   ├── Kunjungan_rm_model.php                    (Model untuk Kunjungan_rm klinik )                        
+│   │   │   ├── Laporan_hasil_pemeriksaan_model.php       (Model untuk Laporan_hasil_pemeriksaan klinik )                        
+│   │   │   ├── Laporan_uji_klinik_model.php              (Model untuk Laporan_uji_klinik )                        
+│   │   │   ├── Pasien_model.php                          (Model untuk Pasienklinik )                        
+│   │   │   ├── Penanggung_teknis_model.php               (Model untuk Penanggung_teknis_model klinik )                        
+│   │   │   ├── petugas_dokter_model.php                  (Model untuk petugas_dokter_model klinik )                        
+│   │   │   ├── Petugas_sampel_model.php                  (Model untuk Petugas_sampel_model klinik )                        
+│   │   │   ├── Petugas_validasi_model.php                (Model untuk Petugas_validasi_model klinik )                        
+│   │   │   ├── Petugas_verifikasi_model.php              (Model untuk Petugas_verifikasi_model klinik )                        
+│   │   │   ├── Puskesmas_wilayah_model.php               (Model untuk Puskesmas_wilayah_model klinik )                        
+│   │   │   ├── Uji_klinik_model.php                      (Model untuk Uji_klinik_model klinik )                        
+│   │   │   ├── User_model.php                            (Model untuk User_model klinik )                        
+│   │   │   ├── Verifikator_model.php                     (Model untuk Verifikator_modelklinik )                        
+│   │   ├── Activity_logs_model.php
+│   │   ├── Data_pending_model.php
+│   │   ├── Kesmas_model.php
+│   │   ├── Login_logs_model.php
+│   │   ├── Penanggung_jawab_teknis_model.php
+│   │   ├── Survei_kepuasan_model.php
+│   │   ├── Tindakan_sampel_model.php
+│   │   ├── User_model.php
+│   │   ├── Verifikator_model.php
+│   ├── views/ (Tampilan / User Interface HTML/PHP)
+│   │   ├── auth/
+│   │   │   ├── login.php
+│   │   ├── errors/ (Halaman Error default CI3)
+│   │   │   ├── cli/
+│   │   │   │   ├── error_404.php
+│   │   │   │   ├── error_db.php
+│   │   │   │   ├── error_exception.php
+│   │   │   │   ├── error_general.php
+│   │   │   │   ├── error_php.php
+│   │   │   ├── html/
+│   │   │   │   ├── error_404.php
+│   │   │   │   ├── error_db.php
+│   │   │   │   ├── error_exception.php
+│   │   │   │   ├── error_general.php
+│   │   │   │   ├── error_php.php
+│   │   ├── kesmas/ (Modul Kesehatan Masyarakat)
+│   │   │   ├── audit_log/
+│   │   │   │   ├── by_action.php
+│   │   │   │   ├── by_date.php
+│   │   │   │   ├── by_table.php
+│   │   │   │   ├── by_user.php
+│   │   │   │   ├── dashboard.php
+│   │   │   │   ├── detail.php
+│   │   │   │   ├── index.php
+│   │   │   │   ├── search.php
+│   │   │   ├── petugas/
+│   │   │   │   ├── form.php
+│   │   │   │   ├── list.php
+│   │   │   ├── survei/
+│   │   │   │   ├── detail.php
+│   │   │   │   ├── form.php
+│   │   │   │   ├── form_edit.php
+│   │   │   │   ├── index.php
+│   │   │   │   ├── laporan.php
+│   │   │   │   ├── view.php
+│   │   │   ├── input_hasil.php
+│   │   │   ├── kaji_ulang_form.php
+│   │   │   ├── laporan_detail.php
+│   │   │   ├── laporan_list.php
+│   │   │   ├── laporan_parameter.php
+│   │   │   ├── pendaftaran_selesai.php
+│   │   │   ├── permintaan_detail.php
+│   │   │   ├── permintaan_form.php
+│   │   │   ├── permintaan_list.php
+│   │   │   ├── print_laporan.php
+│   │   │   ├── print_pendaftaran.php
+│   │   │   ├── uji_list.php
+│   │   │   ├── verifikasi_sample_form.php
+│   │   ├── klinik/                                (Modul Pemeriksaan Klinik)
+│   │   │   ├── auth/
+│   │   │   │   ├── login.php                      (tampilan login klinik)
+│   │   │   ├── dashboard_klinik/
+│   │   │   │   ├── dashboard.php                  (halaman dasbord super admin klinik)
+│   │   │   │   ├── Dashboard_dokter.php           (halaman dasbord dokter klinik)
+│   │   │   │   ├── Dashboard_klinik.php           (halaman dasbord koordinator klinik)
+│   │   │   │   ├── Dashboard_pendaftaran.php      (halaman dasbord pendaftaran klinik)
+│   │   │   ├── form_laporan_akhir/
+│   │   │   │   ├── index.php                      (tampilan form laporan akhir klinik)
+│   │   │   ├── form_permintaan_klinik/
+│   │   │   │   ├── detail.php                     (tampilan detail form permintaan klinik)
+│   │   │   │   ├── form.php                       (tampilan form create & edit permintaan klinik)
+│   │   │   │   ├── index.php                      (tampilan halaman depan pendaftaran permintaan klinik)
+│   │   │   │   ├── modal_input_hasil.php          (--)
+│   │   │   │   ├── print.php                      (tampilan print permintaan klinik)
+│   │   │   ├── form_permintaan_rm/
+│   │   │   │   ├── detail.php                     (tampilan detail identitas pasien klinik)
+│   │   │   │   ├── form.php                       (tampilan form pendaftaran & edit identitas pasien klinik)
+│   │   │   │   ├── index.php                      (tampilan halaman depan pendaftaran permintaan klinik)
+│   │   │   ├── hasil_uji/
+│   │   │   │   ├── hasil_lab.php                  (tampilan hasil lab klinik)
+│   │   │   │   ├── index.php                      (tampilan list hasil lab klinik)
+│   │   │   ├── kunjungan_rekam_medis/
+│   │   │   │   ├── soap.php                       (menambah soap pasien klinik)
+│   │   │   ├── laporan_bulanan_tahunan/
+│   │   │   │   ├── excel_laporan_tahunan.php      (--)
+│   │   │   │   ├── index.php                      (--)
+│   │   │   │   ├── laporan_tahunan.php            (--)
+│   │   │   ├── laporan_rekam_medis/
+│   │   │   │   ├── detail_hasil_uji_soap.php      (--)
+│   │   │   │   ├── detail_kunjungan.php           (--)
+│   │   │   │   ├── detail_pasien.php              (--)
+│   │   │   │   ├── detail_pendaftaran.php         (--)
+│   │   │   │   ├── detail_uji_klinik.php          (--)
+│   │   │   │   ├── index.php                      (--)
+│   │   │   │   ├── laporan_hasil_uji_soap.php     (--)
+│   │   │   │   ├── print_pasien.php               (--)
+│   │   │   ├── laporan_uji_klinik/
+│   │   │   │   ├── detail.php                     (--)
+│   │   │   │   ├── index.php                      (--)
+│   │   │   │   ├── print.php                      (--)
+│   │   │   ├── layout/          
+│   │   │   │   ├── footer.php                   (layout untuk klinik)
+│   │   │   │   ├── header.php                   (layout untuk klinik)
+│   │   │   │   ├── sidebar.php                  (layout untuk klinik)
+│   │   │   ├── penanggung_teknis/
+│   │   │   │   ├── form.php                      (tampilan form create penanggung teknis klinik)
+│   │   │   │   ├── index.php                     (tampilan list penanggung teknis klinik)
+│   │   │   ├── petugas_rekam_medis/
+│   │   │   │   ├── create.php                    (tampilan form create petugas rekam medis klinik)
+│   │   │   │   ├── edit.php                      (tampilan edit petugas rekam medis klinik)
+│   │   │   │   ├── index.php                     (tampilan list petugas rekam medis klinik)
+│   │   │   ├── petugas_sampel/
+│   │   │   │   ├── form.php                      (tampilan form create petugas rekam medis klinik)
+│   │   │   │   ├── index.php                     (tampilan list petugas rekam medis klinik)
+│   │   │   ├── petugas_validasi/
+│   │   │   │   ├── form.php                      (tampilan form create petugas validasi klinik)
+│   │   │   │   ├── index.php                     (tampilan list petugas validasi klinik)
+│   │   │   ├── petugas_verifikasi/
+│   │   │   │   ├── form.php                      (tampilan form create petugas verifikasi klinik)
+│   │   │   │   ├── index.php                     (tampilan list petugas verifikasi klinik)
+│   │   │   ├── uji_klinik/
+│   │   │   │   ├── edit.php                      (--)
+│   │   │   │   ├── form.php                      (tampilan form input uji lab klinik)
+│   │   │   │   ├── index.php                     (tampilan halaman depan uji lab klinik)
+│   │   │   ├── uji_rekam_klinik/
+│   │   │   │   ├── detail.php                    (detail kunjungan pasien klinik)
+│   │   │   │   ├── index.php                     (tampilan awal kunjungan pasien klinik)
+│   │   │   ├── uji_rekam_medis/
+│   │   │   │   ├── detail.php                    (tampilan riwayat kunjungan pasien SOAP klinik (rekam_medis))
+│   │   │   │   ├── index.php                     (tampilan awal kunjungan pasien SOAP klinik (rekam_medis))
+│   │   │   │   ├── lihat_soap.php                (tampilan lihat hasil kunjungan pasien SOAP klinik (rekam_medis))
+│   │   │   │   ├── print_soap.php                (tampilan print kunjungan pasien SOAP klinik (rekam_medis))
+│   │   │   │   ├── print_soap_pdf.php            (tampilan print kunjungan pasien SOAP klinik (rekam_medis))
+│   │   │   ├── user/
+│   │   │   │   ├── edit.php                      (tampilan edit user klinik)
+│   │   │   │   ├── form.php                      (tampilan form create user klinik)
+│   │   │   │   ├── index.php                     (tampilan list user klinik)
+│   │   │   ├── Verifikator/
+│   │   │   │   ├── form.php                      (tampilan form create verifikator klinik)
+│   │   │   │   ├── index.php                     (tampilan list verifikator klinik)
+│   │   ├── layout/ (Template Layout Master Admin)
+│   │   │   ├── footer.php
+│   │   │   ├── header.php
+│   │   │   ├── main.php
+│   │   │   ├── sidebar.php
+│   │   ├── partials/ (Komponen Tampilan Kecil/Reusable)
+│   │   │   ├── _card_section.php
+│   │   │   ├── _form_row.php
+│   │   │   ├── _professional_table.php
+│   │   │   ├── flash.php
+│   │   ├── penanggung_jawab_teknis/
+│   │   │   ├── add.php
+│   │   │   ├── edit.php
+│   │   │   ├── list.php
+│   │   ├── petugas/
+│   │   │   ├── add.php
+│   │   │   ├── list.php
+│   │   ├── public/ (Halaman yang bisa diakses tanpa login)
+│   │   │   ├── footer.php
+│   │   │   ├── header.php
+│   │   │   ├── landing.php
+│   │   │   ├── permintaan_form.php
+│   │   │   ├── print_bukti.php
+│   │   │   ├── success.php
+│   │   │   ├── tracking.php
+│   │   ├── security/ (Panel Log & Analisis Keamanan)
+│   │   │   ├── activity_detail.php
+│   │   │   ├── activity_logs.php
+│   │   │   ├── dashboard.php
+│   │   │   ├── login_logs.php
+│   │   │   ├── pending_data.php
+│   │   ├── tindakan_sampel/
+│   │   │   ├── form.php
+│   │   │   ├── list.php
+│   │   ├── verifikator/
+│   │   │   ├── add.php
+│   │   │   ├── list.php
+│   │   ├── dashboard.php
+├── assets/ (Asset Statis Frontend)
+│   ├── css/
+│   │   ├── dashboard.css
+│   │   ├── login.css
+│   │   ├── ui-polish.css (CSS Kustom Tambahan)
+│   ├── img/ (Aset Gambar)
+│   │   ├── background.png
+│   │   ├── doctor_patient.png
+│   │   ├── logo.png
+│   │   ├── logoatmaluhur.png
+│   │   ├── logolabkes.png
+│   ├── js/
+│   │   ├── premium-effects.js
+│   │   ├── premium.js
+│   ├── manifest.json
+│   ├── sw.js (Service Worker untuk PWA/Offline support)
+├── database/ (Skema SQL Database)
+│   ├── kesmas_new.sql
+│   ├── security_features.sql
+│   ├── security_sessions.sql
+├── system/ [Core Framework CodeIgniter]
+├── tools/ (Skrip Utilitas Mandiri)
+│   ├── backfill_baku_mutu.php
+│   ├── duplicate_database.php
+├── vendor/ [Library Pihak Ketiga / Composer]
+├── .htaccess (Konfigurasi Web Server Apache)
+├── arsitektur.txt (Dokumen Arsitektur Proyek)
+├── cetak_laporan.php (Script cetak laporan langsung)
+├── index.php (Entry point CodeIgniter)
+├── index.zip (Backup atau Source Zip)
+
+
+D. Assets (\assets\) -> C:\laragon\www\lebkes-main\assets\
+   - /css/                   (File style kustom, bootstrap.min.css lokal)
+      -- dashboard.css       (css tampilan dashboard klinik)
+      -- login.css           (css tampilan login klinik)
+   - /js/                    (File script kustom, bootstrap.bundle.min.js, jquery.min.js)
+   - /img/                   (Gambar, logo aplikasi, icon)
+   - /plugins/               (Library tambahan seperti DataTables, Select2)
+
+
+3. PANDUAN PENGEMBANGAN (Berdasarkan Rules)
+------------------------------------------------------
+- Standard File  : Selalu tambahkan baris `defined('BASEPATH') OR exit('No direct script access allowed');` di atas file Controller/Model baru.
+- Keamanan DB    : Wajib menggunakan Query Builder CI3 (contoh: `$this->db->insert()`, `$this->db->where()`) untuk menghindari SQL Injection.
+- Input & XSS    : Gunakan fitur `form_validation` dan filter `xss_clean` saat menerima input dari user. Pada view gunakan `html_escape()` saat menampilkan data rawan.
+- Frontend UI    : Desain wajib responsif di semua devais (mobile, tablet, desktop) menggunakan sistem Grid Bootstrap 5. Jangan gunakan struktur tabel untuk layout tampilan, gunakan div flex/grid.
+- Interaksi      : Gunakan jQuery AJAX untuk memproses data dari sisi client tanpa harus me-reload halaman sepenuhnya. Logika Controller menangkap request via `$this->input->is_ajax_request()`.

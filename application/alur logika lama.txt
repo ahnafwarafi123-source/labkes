@@ -1,0 +1,92 @@
+================================================================================
+LOG PERUBAHAN & KOMENTAR KODE (REVISI - FILTER TANGGAL DI SEMUA MODUL KLINIK)
+================================================================================
+Tanggal Perubahan : 15 Juli 2026 04:50
+Tujuan Perubahan  : Menambahkan fitur filter tanggal (Exact Match) pada tiga modul klinik:
+                    1. Riwayat Kunjungan Pasien Klinik (uji_rekam_klinik)
+                    2. Pendaftaran Rekam Medis (form_permintaan_rm)
+                    3. Formulir Permintaan Pemeriksaan (form_permintaan_klinik)
+
+--------------------------------------------------------------------------------
+1. MODUL: Riwayat Kunjungan Pasien Klinik (uji_rekam_klinik)
+--------------------------------------------------------------------------------
+* Berkas Terkait:
+  - application/controllers/klinik/Uji_rekam_klinik.php
+  - application/views/klinik/uji_rekam_klinik/index.php
+* Logika & Variabel:
+  - Menyaring data berdasarkan tanggal daftar tunggal ($tgl_mulai) mencocokkan `DATE(p.created_at)`.
+  - $query_string diatur untuk melekatkan &tgl_mulai ke tautan navigasi halaman.
+  - Colspan pada tampilan kosong di tabel diatur menjadi 8.
+
+--------------------------------------------------------------------------------
+2. MODUL: Formulir Permintaan Pemeriksaan (form_permintaan_klinik)
+--------------------------------------------------------------------------------
+* Berkas Terkait:
+  - application/controllers/klinik/Form_permintaan_klinik.php
+  - application/models/Klinik/Form_permintaan_klinik_model.php
+  - application/views/klinik/form_permintaan_klinik/index.php
+* Logika & Variabel:
+  - Menyaring data berdasarkan tanggal form tunggal ($tgl_mulai) mencocokkan `DATE(form_permintaan_klinik.tgl_form)`.
+  - Menyesuaikan fungsi get_all_formulir_paginated() dan get_all_formulir_count() pada Model untuk menerima parameter $tgl_mulai.
+  - Tampilan index.php ditambahkan input type="date" dengan nama 'tgl_mulai' (Tanggal Form).
+  - Paginasi disesuaikan menggunakan $query_string.
+
+--------------------------------------------------------------------------------
+3. MODUL: Pendaftaran Rekam Medis (form_permintaan_rm)
+--------------------------------------------------------------------------------
+* Berkas Terkait:
+  - application/controllers/klinik/Form_permintaan_rm.php
+  - application/models/Klinik/Form_permintaan_rm_model.php
+  - application/views/klinik/form_permintaan_rm/index.php
+* Logika & Variabel:
+  - Menyaring data berdasarkan tanggal pendaftaran tunggal ($tgl_mulai) mencocokkan `DATE(pasien.created_at)`.
+  - Menyesuaikan fungsi get_all_paginated() dan get_all_count() pada Model untuk menerima parameter $tgl_mulai.
+  - Tampilan index.php ditambahkan input type="date" dengan nama 'tgl_mulai' (Tgl Pendaftaran).
+  - Paginasi disesuaikan menggunakan $query_string.
+================================================================================
+
+================================================================================
+LOG PERUBAHAN & KOMENTAR KODE (REVISI 2 - FILTER TANGGAL & FILTER ALL)
+================================================================================
+Tanggal Perubahan : 15 Juli 2026 05:10
+Tujuan Perubahan  : Menambahkan fitur filter tanggal (Exact Match) dan filter penampil
+                    semua data (Limit 'All') pada modul rekam medis (uji_rekam_medis).
+
+--------------------------------------------------------------------------------
+1. MODUL: Kunjungan Rekam Medis (uji_rekam_medis)
+--------------------------------------------------------------------------------
+* Berkas Terkait:
+  - application/controllers/klinik/Uji_rekam_medis.php
+  - application/views/klinik/uji_rekam_medis/index.php
+* Logika & Variabel:
+  - Menyaring data berdasarkan tanggal pendaftaran tunggal ($tgl_mulai) mencocokkan `DATE(pasien.created_at)`.
+  - Mendukung filter 'limit' dengan nilai 'all' untuk menampilkan seluruh data (limit diset ke 999999).
+  - $query_string diatur untuk melekatkan &tgl_mulai dan &limit ke tautan navigasi halaman.
+  - Tampilan index.php ditambahkan opsi dropdown limit 'All' dan input type="date" dengan nama 'tgl_mulai'.
+  - Menambahkan kolom header dan body "Tgl Pendaftaran" pada tabel rekam medis.
+  - Menyesuaikan kalkulasi variabel $no jika limit diset ke 'all' agar nomor urut dimulai dari 1.
+  - Menyesuaikan penulisan teks info data "Menampilkan semua data (X data)" jika limit diset ke 'all'.
+  - Menyembunyikan pagination jika limit diset ke 'all'.
+  - Colspan pada penanganan data kosong diatur menjadi 8.
+================================================================================
+
+================================================================================
+Tanggal Perubahan : 15 Juli 2026 06:00
+Tujuan Perubahan  : Memperbaiki kesalahan logika kueri pencarian (filter) dan rendering
+                    tabel pada modul Formulir Permintaan Pemeriksaan.
+
+--------------------------------------------------------------------------------
+1. MODUL: Formulir Permintaan Pemeriksaan (form_permintaan_klinik)
+--------------------------------------------------------------------------------
+* Berkas Terkait:
+  - application/models/Klinik/Form_permintaan_klinik_model.php
+  - application/views/klinik/form_permintaan_klinik/index.php
+* Logika & Perbaikan:
+  - Model (Form_permintaan_klinik_model.php):
+    * Memperbaiki bug kueri hitung total data (`get_all_formulir_count`). Sebelumnya, kueri count kehilangan parameter filter pencarian `pasien.no_rm` sehingga ketika pengguna mencari berdasarkan Nomor RM, total data terhitung salah (berbeda dengan data paginated).
+    * Menambahkan baris `$this->db->or_like('pasien.no_rm', $search);` agar identik dengan kueri data list.
+  - View (index.php):
+    * Memperbaiki bug kalkulasi nomor urut data `$no`. Ketika limit diset ke `'all'`, sistem sekarang melakukan kalkulasi perkalian secara kondisional (`$limit === 'all' ? 0 : (int)$limit`) untuk menghindari kesalahan matematika/warning di PHP.
+    * Memperbaiki nilai atribut `colspan` dari `8` menjadi `9` pada penanganan baris tabel kosong, karena jumlah kolom aktif yang sebenarnya di header tabel adalah 9 kolom. Hal ini mencegah tampilan baris kosong terpotong secara visual.
+================================================================================
+
