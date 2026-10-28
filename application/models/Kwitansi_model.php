@@ -4,8 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * Kwitansi_model
  *
- * Dipakai bersama oleh modul Kesmas, Klinik, dan Rekam Medis.
- * - tarif_pemeriksaan : daftar tarif per modul ('kesmas' | 'klinik'; Rekam Medis memakai tarif klinik)
+ * Dipakai bersama oleh modul Kesmas dan Klinik.
+ * - tarif_pemeriksaan : daftar tarif per modul ('kesmas' | 'klinik')
  * - kwitansi          : satu kwitansi per pendaftaran (modul + ref_id)
  * - kwitansi_item     : snapshot nama & harga item saat kwitansi disimpan
  *
@@ -13,7 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class Kwitansi_model extends CI_Model
 {
-    const MODUL_KODE = ['kesmas' => 'KM', 'klinik' => 'LK', 'rm' => 'RM'];
+    const MODUL_KODE = ['kesmas' => 'KM', 'klinik' => 'LK'];
 
     public function __construct()
     {
@@ -191,7 +191,9 @@ class Kwitansi_model extends CI_Model
     {
         if (!$this->db->table_exists('kesmas_master_pemeriksaan')) return 0;
 
-        $urut_kategori = ['Air Minum' => 1, 'Air Bersih / Air Sanitasi' => 2, 'Makanan' => 3, 'Lingkungan' => 4];
+        $urut_kategori = ['Air Minum' => 1, 'Air Higiene / Air Sanitasi' => 2, 'Makanan' => 3, 'Lingkungan' => 4];
+        // Label kelompok di kwitansi berbeda dari kategori master
+        $label_kategori = ['Air Bersih / Air Sanitasi' => 'Air Higiene / Air Sanitasi'];
 
         $existing = array_column(
             $this->db->select('ref_id')->where('modul', 'kesmas')->where('ref_id IS NOT NULL', null, false)->get('tarif_pemeriksaan')->result_array(),
@@ -205,6 +207,7 @@ class Kwitansi_model extends CI_Model
         foreach ($master as $i => $m) {
             if (in_array($m['id_master_pemeriksaan'], $existing)) continue;
             $kategori = $m['kategori'] ?: 'Lainnya';
+            $kategori = $label_kategori[$kategori] ?? $kategori;
             $rows[] = [
                 'modul' => 'kesmas',
                 'kelompok' => $kategori,
@@ -300,7 +303,7 @@ class Kwitansi_model extends CI_Model
     public function get_sumber(string $modul, int $ref_id): ?array
     {
         $this->_sumber_query($modul, '');
-        $col = ['kesmas' => 'p.id_permintaan', 'klinik' => 'f.id', 'rm' => 'p.id_pasien'][$modul];
+        $col = ['kesmas' => 'p.id_permintaan', 'klinik' => 'f.id'][$modul];
         $this->db->where($col, $ref_id);
         $row = $this->db->get()->row_array();
         return $row ?: null;
@@ -329,7 +332,7 @@ class Kwitansi_model extends CI_Model
                     ->or_like('pl.instansi', $q)->or_like('p.nama_sampel', $q)->or_like('k.no_kwitansi', $q)->group_end();
             }
             $this->db->order_by('p.id_permintaan', 'DESC');
-        } elseif ($modul === 'klinik') {
+        } else { // klinik
             $this->db->select("f.id AS ref_id, f.no_register AS kode, ps.nama_pasien AS nama, ps.no_rm,
                 f.tgl_form AS tanggal, f.nama_dokter AS keterangan,
                 f.jumlah_biaya AS biaya_terdaftar, f.metode_pembayaran AS metode_terdaftar,
@@ -342,18 +345,6 @@ class Kwitansi_model extends CI_Model
                     ->or_like('ps.no_rm', $q)->or_like('k.no_kwitansi', $q)->group_end();
             }
             $this->db->order_by('f.id', 'DESC');
-        } else { // rm
-            $this->db->select("p.id_pasien AS ref_id, p.no_rm AS kode, p.nama_pasien AS nama, p.nik,
-                DATE(p.created_at) AS tanggal, CONCAT_WS(', ', p.gender, CONCAT(p.umur, ' th')) AS keterangan,
-                NULL AS biaya_terdaftar, NULL AS metode_terdaftar,
-                k.no_kwitansi, k.total AS kwitansi_total, k.tanggal AS kwitansi_tanggal", false)
-                ->from('pasien p')
-                ->join('kwitansi k', "k.ref_id = p.id_pasien AND $kw", 'left');
-            if ($q !== '') {
-                $this->db->group_start()->like('p.no_rm', $q)->or_like('p.nama_pasien', $q)
-                    ->or_like('p.nik', $q)->or_like('k.no_kwitansi', $q)->group_end();
-            }
-            $this->db->order_by('p.id_pasien', 'DESC');
         }
     }
 
@@ -386,14 +377,9 @@ class Kwitansi_model extends CI_Model
             return $result;
         }
 
-        // Klinik: detail form ini. Rekam Medis: semua form klinik milik pasien tersebut.
-        $this->db->select('d.nama_jenis, d.sub_kategori, d.kategori')->from('form_permintaan_klinik_detail d');
-        if ($modul === 'klinik') {
-            $this->db->where('d.id_form', $ref_id);
-        } else {
-            $this->db->join('form_permintaan_klinik f', 'f.id = d.id_form', 'inner')->where('f.id_pasien', $ref_id);
-        }
-        $details = $this->db->get()->result_array();
+        // Klinik: detail form ini.
+        $details = $this->db->select('d.nama_jenis, d.sub_kategori, d.kategori')->from('form_permintaan_klinik_detail d')
+            ->where('d.id_form', $ref_id)->get()->result_array();
 
         $alias = [];
         foreach ($this->get_tarif('klinik') as $t) {
@@ -541,13 +527,10 @@ class Kwitansi_model extends CI_Model
      * Data cetak
      * ------------------------------------------------------------------ */
 
-    /** Ringkasan per kelompok (semua kelompok tarif tampil, termasuk yang Rp 0). */
+    /** Ringkasan per kelompok, hanya kelompok yang memiliki item terpilih. */
     public function ringkasan_kelompok(string $modul, array $kwitansi): array
     {
         $ringkasan = [];
-        foreach ($this->get_tarif_grouped($modul) as $kelompok => $items) {
-            $ringkasan[$kelompok] = 0.0;
-        }
         foreach ($kwitansi['items'] as $it) {
             $ringkasan[$it['kelompok']] = ($ringkasan[$it['kelompok']] ?? 0) + (float)$it['harga'];
         }

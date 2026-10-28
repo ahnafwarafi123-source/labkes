@@ -3,10 +3,9 @@
 /**
  * Cetak kwitansi: Daftar Pemeriksaan (tarif) + Bukti Pembayaran.
  * Dipakai untuk Print (browser) dan PDF (mPDF) — hanya memakai tabel, tanpa flex/grid.
- * @var array $cfg, $kwitansi, $tarif, $ringkasan, $terpilih; @var bool $is_pdf
+ * @var array $cfg, $kwitansi, $tarif, $ringkasan; @var bool $is_pdf
  */
 $is_pdf = !empty($is_pdf);
-$terpilih = array_flip($terpilih);
 
 $img = function ($file) use ($is_pdf) {
     if ($is_pdf) return is_file(FCPATH . 'assets/img/' . $file) ? FCPATH . 'assets/img/' . $file : '';
@@ -24,25 +23,25 @@ $bulan = [1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', '
 $ts = strtotime($kwitansi['tanggal'] ?: date('Y-m-d'));
 $tanggal_indo = date('j', $ts) . ' ' . $bulan[(int)date('n', $ts)] . ' ' . date('Y', $ts);
 
-// Susun baris daftar tarif lalu bagi dua kolom pada batas kelompok terdekat dengan setengah.
-$blok = [];
+// Hanya item yang dipilih (snapshot kwitansi_item); keterangan diambil dari tarif saat ini.
+$ket_tarif = [];
+foreach ($tarif as $items) {
+    foreach ($items as $t) $ket_tarif[(int)$t['id_tarif']] = $t['keterangan'];
+}
+$per_kelompok = [];
+foreach ($kwitansi['items'] as $it) {
+    $per_kelompok[$it['kelompok']][] = $it;
+}
+$baris = [];
 $gi = 0;
-foreach ($tarif as $kelompok => $items) {
+foreach ($per_kelompok as $kelompok => $items) {
     $gi++;
-    $rows = [['type' => 'group', 'no' => $romawi($gi) . '.', 'nama' => strtoupper($kelompok)]];
-    foreach ($items as $ii => $t) {
-        $rows[] = ['type' => 'item', 'no' => $ii + 1, 'nama' => $t['nama_item'], 'ket' => $t['keterangan'],
-            'harga' => $t['harga'], 'selected' => isset($terpilih[(int)$t['id_tarif']])];
+    $baris[] = ['type' => 'group', 'no' => $romawi($gi) . '.', 'nama' => strtoupper($kelompok)];
+    foreach ($items as $ii => $it) {
+        $baris[] = ['type' => 'item', 'no' => $ii + 1, 'nama' => $it['nama_item'],
+            'ket' => $ket_tarif[(int)$it['id_tarif']] ?? '', 'harga' => $it['harga']];
     }
-    $blok[] = $rows;
 }
-$total_baris = array_sum(array_map('count', $blok));
-$kiri = []; $kanan = []; $jalan = 0;
-foreach ($blok as $rows) {
-    if ($jalan + count($rows) / 2 <= $total_baris / 2) { $kiri = array_merge($kiri, $rows); } else { $kanan = array_merge($kanan, $rows); }
-    $jalan += count($rows);
-}
-$jumlah_baris = max(count($kiri), count($kanan));
 ?>
 <!doctype html>
 <html lang="id">
@@ -68,7 +67,6 @@ $jumlah_baris = max(count($kiri), count($kanan));
     .tarif .c { text-align: center; }
     .tarif .r { text-align: right; white-space: nowrap; }
     .tarif .grp { font-weight: bold; }
-    .tarif .sel { color: #c00000; font-weight: bold; }
     .ket { font-size: 8px; }
     .bukti td { padding: 1px 4px; font-size: 11px; vertical-align: top; }
     .rincian td { padding: 1px 4px; font-size: 11px; }
@@ -102,29 +100,31 @@ $jumlah_baris = max(count($kiri), count($kanan));
   <table class="tarif">
     <thead>
       <tr>
-        <th style="width:5%">No.</th><th style="width:30%">JENIS PEMERIKSAAN</th><th style="width:13%">JUMLAH (Rp.)</th>
-        <th style="width:5%">No.</th><th style="width:34%">JENIS PEMERIKSAAN</th><th style="width:13%">JUMLAH (Rp.)</th>
+        <th style="width:8%">No.</th><th>JENIS PEMERIKSAAN</th><th style="width:20%">JUMLAH (Rp.)</th>
       </tr>
     </thead>
     <tbody>
-      <?php for ($i = 0; $i < $jumlah_baris; $i++): ?>
+      <?php if (!$baris): ?>
+        <tr><td colspan="3" class="c">Tidak ada pemeriksaan yang dipilih.</td></tr>
+      <?php endif; ?>
+      <?php foreach ($baris as $sel): ?>
         <tr>
-          <?php foreach ([$kiri[$i] ?? null, $kanan[$i] ?? null] as $sel): ?>
-            <?php if (!$sel): ?>
-              <td></td><td></td><td></td>
-            <?php elseif ($sel['type'] === 'group'): ?>
-              <td class="c grp"><?= $sel['no'] ?></td><td class="grp"><?= html_escape($sel['nama']) ?></td><td></td>
-            <?php else: $cls = $sel['selected'] ? ' sel' : ''; ?>
-              <td class="c<?= $cls ?>"><?= (int)$sel['no'] ?></td>
-              <td class="<?= trim($cls) ?>">
-                <?= html_escape($sel['nama']) ?>
-                <?php if (!empty($sel['ket'])): ?><br><span class="ket">(<?= html_escape($sel['ket']) ?>)</span><?php endif; ?>
-              </td>
-              <td class="r<?= $cls ?>"><?= $angka($sel['harga']) ?></td>
-            <?php endif; ?>
-          <?php endforeach; ?>
+          <?php if ($sel['type'] === 'group'): ?>
+            <td class="c grp"><?= $sel['no'] ?></td><td class="grp"><?= html_escape($sel['nama']) ?></td><td></td>
+          <?php else: ?>
+            <td class="c"><?= (int)$sel['no'] ?></td>
+            <td>
+              <?= html_escape($sel['nama']) ?>
+              <?php if (!empty($sel['ket'])): ?><br><span class="ket">(<?= html_escape($sel['ket']) ?>)</span><?php endif; ?>
+            </td>
+            <td class="r"><?= $angka($sel['harga']) ?></td>
+          <?php endif; ?>
         </tr>
-      <?php endfor; ?>
+      <?php endforeach; ?>
+      <tr>
+        <td colspan="2" class="r grp">TOTAL</td>
+        <td class="r grp"><?= $angka($kwitansi['total']) ?></td>
+      </tr>
     </tbody>
   </table>
 

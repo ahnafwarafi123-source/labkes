@@ -14,7 +14,6 @@ $csrf_hash = $this->security->get_csrf_hash();
       <h3 class="text-dark fw-bold mb-1">TARIF PEMERIKSAAN</h3>
       <div class="text-muted small">
         <?= html_escape($cfg['judul_menu']) ?> &middot; <?= html_escape(ucfirst(strtolower($cfg['judul_dasar']))) ?>.
-        <?php if ($cfg['modul'] === 'rm'): ?>Rekam Medis memakai tarif yang sama dengan Klinik.<?php endif; ?>
       </div>
     </div>
     <div class="d-flex flex-wrap gap-2">

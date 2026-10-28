@@ -12,7 +12,25 @@ Format: Keep a Changelog + CalVer (vYYYY.MM.DD).
 
 ## [Unreleased]
 
-_(belum ada perubahan tercatat)_
+**Ringkasan:** Menu Kwitansi RM di grup Rekam Medis dihapus. Kwitansi kini
+hanya untuk Kesmas dan Klinik.
+
+### Changed
+
+- Kelompok tarif kwitansi Kesmas "Air Bersih / Air Sanitasi" → "Air Higiene / Air Sanitasi"
+  (data `tarif_pemeriksaan` & `kwitansi_item`, serta pemetaan di `Kwitansi_model::sync_tarif_kesmas`)
+- Cetak kwitansi (print & PDF) hanya menampilkan pemeriksaan yang dipilih, dalam satu
+  tabel dengan baris TOTAL; ringkasan bukti pembayaran hanya berisi kelompok yang terisi
+  (`views/kwitansi/print.php`, `Kwitansi_model::ringkasan_kelompok`)
+
+### Removed
+
+- Data: tarif Kesmas kelompok "benda" (item "kursi", Rp 20.000) beserta itemnya di
+  KW/0003, KW/0004, KW/0005/KM/2026 (total kwitansi dihitung ulang) — `lebkes_db`
+- Controller `klinik/Kwitansi_rm` (URL `klinik/kwitansi_rm/...` kini 404)
+- Menu "Kwitansi RM" di sidebar Rekam Medis
+- Cabang modul `rm` di `Kwitansi_model` (`MODUL_KODE`, `get_sumber`,
+  `_sumber_query`, `saran_tarif`) dan catatan RM di view `kwitansi/tarif.php`
 
 ## [v2026.10.22] - 2026-10-22
 

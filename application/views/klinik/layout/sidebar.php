@@ -88,7 +88,7 @@ $kes_staff_active  = in_array($seg2, ['petugas', 'verifikator', 'penanggung_jawa
 
 // Status aktif grup menu Klinik
 $klinik_lab_active = in_array($seg2, ['form_permintaan_klinik', 'uji_klinik', 'laporan_uji_klinik', 'kwitansi_klinik']);
-$klinik_rm_active  = in_array($seg2, ['form_permintaan_rm', 'uji_rekam_medis', 'uji_rekam_klinik', 'hasil_laporan', 'kwitansi_rm']);
+$klinik_rm_active  = in_array($seg2, ['form_permintaan_rm', 'uji_rekam_medis', 'uji_rekam_klinik', 'hasil_laporan']);
 $klinik_lap_active = in_array($seg2, ['form_laporan_akhir', 'puskesmas_wilayah']);
 $klinik_staf_active= in_array($seg2, ['petugas_sampel', 'petugas_verifikasi', 'petugas_validasi', 'verifikator', 'penanggung_teknis', 'petugas_dokter']);
 
@@ -335,14 +335,6 @@ $greeting_role = current_role_label();
             <li class="nav-item">
               <a href="<?= site_url('klinik/uji_rekam_klinik') ?>" class="nav-link <?= $seg2 == 'uji_rekam_klinik' ? 'active' : '' ?>">
                 <i class="nav-icon far fa-circle" style="font-size: 0.5rem;"></i> Detail Rekam Klinik
-              </a>
-            </li>
-            <?php endif; ?>
-
-            <?php if ($is_klinik_admin || $is_klinik_pendaftaran || $is_klinik_rm): ?>
-            <li class="nav-item">
-              <a href="<?= site_url('klinik/kwitansi_rm') ?>" class="nav-link <?= $seg2 == 'kwitansi_rm' ? 'active' : '' ?>">
-                <i class="nav-icon far fa-circle" style="font-size: 0.5rem;"></i> Kwitansi RM
               </a>
             </li>
             <?php endif; ?>

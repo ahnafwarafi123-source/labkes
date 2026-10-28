@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
- * Alur kwitansi yang dipakai bersama oleh controller Kesmas, Klinik, dan Rekam Medis.
+ * Alur kwitansi yang dipakai bersama oleh controller Kesmas dan Klinik.
  *
  *   index  → daftar pendaftaran + status kwitansi
  *   form   → buat / ubah kwitansi (pemeriksaan tercentang otomatis dari pendaftaran)
@@ -146,7 +146,6 @@ trait Kwitansi_flow
             'kwitansi' => $kwitansi,
             'tarif' => $this->Kwitansi_model->get_tarif_grouped($cfg['modul']),
             'ringkasan' => $this->Kwitansi_model->ringkasan_kelompok($cfg['modul'], $kwitansi),
-            'terpilih' => array_map('intval', array_column($kwitansi['items'], 'id_tarif')),
             'is_pdf' => $is_pdf,
         ];
     }
